@@ -209,6 +209,7 @@ if __name__ == '__main__':
             F = Frame(piece_display, bg='black', width=int(250/9-4), height=int(250/9-4), bd=0)
             F.grid(row=i, column=j, padx=2, pady=2)
             F.bind('<Button-1>', cycle_piece)
+            F.bind('<Button-2>', cycle_position)
             F.bind('<Button-3>', cycle_position)
             row[j] = F
 
