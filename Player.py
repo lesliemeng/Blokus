@@ -34,6 +34,14 @@ class Player():
             for piece in pieces:
                 self.pieces.append(Piece(color=color, squares=piece))
 
+    # official str
+    def __repr__(self):
+        return 'Player: color={}, score={}, pieces={}'.format(self.color, self.score, [str(piece) for piece in self.pieces])
+
+    # informal str
+    def __str__(self):
+        return repr(self)
+
     # TODO brute force approach
     # return legal moves
     def get_legal_moves(self, board):

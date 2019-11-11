@@ -1,16 +1,3 @@
-#!/usr/bin/env python3
-
-"""
-Leslie Meng
-Class: CS 521 - Fall 2
-Date: 12/12/2019
-Final Project
-This Piece class is imported by main.py.
-More description are below
-"""
-
-import copy
-
 class Piece():
     '''
     A single game piece. 
@@ -47,6 +34,18 @@ class Piece():
 
         self.rotation = 0
         self.flipped = False
+
+    # official str
+    def __repr__(self):
+        return 'Piece: color={}, value={}'.format(self.color, self.value)
+
+    # informal str
+    def __str__(self):
+        return repr(self)
+
+    # equal or not
+    def __eq__(self, other):
+        return self.squares == other.squares
 
     # uses the squares list to create a list of squares
     # of where other pieces of the same color cannot go
