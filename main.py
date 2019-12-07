@@ -1,12 +1,25 @@
+#!/usr/bin/env python3
+"""
+Leslie Meng
+Class: CS 521 - Fall 2
+Date: 12/12/2019
+Final Project
+Blokus is a board game, where players place pieces on a board to occupy the board.
+Player who occupy most of the board wins.
+"""
+
+# no globals in blokus_core, so * import is safe
+#from blokus_core import *
 from Piece import Piece
 from Player import Player
 from Board import Board
-
 # TODO see docs here: https://docs.python.org/3/library/tkinter.html
 from tkinter import * # lib included in python3, hence requires python3
+import copy
+
 
 # set all globals to none
-board, player, piece, piece_index, move_chosen, moves_not_made = [None]*6
+board, player, piece, piece_index, move_chosen, moves_not_made, winner_result = [None]*7
 
 def play_game(players=4):
     global board
@@ -15,22 +28,25 @@ def play_game(players=4):
     global piece_index
     global move_chosen
     global moves_not_made
+    global winner_result
 
     # all 4 players are controlled by user(s)
     board = Board(players)
     game_over = False
     moves_not_made = 0
+    # count round
+    count_round = 0
 
     # keep going while game not over
     while not game_over:
         # tkinter required updates
         root.update_idletasks()
         root.update()
-
+        
         # each round
         for player in board.players:
             # prompt player turn by using color as indicator
-            turn_indicator.config(bg=player.color)
+            turn_indicator.config(bg=player.get_color())
             # default piece
             piece = player.pieces[0]
             piece_index = -1
@@ -39,7 +55,10 @@ def play_game(players=4):
             update_scores()
             refresh(board)
             cycle_piece('')
-
+            
+            # write player data into output file
+            f.write("Round: {0:<5.0f} {1:<20s}".format(count_round, str(player.__str__())) + "\n")
+            
             # wait for player to make move
             while not move_chosen:
                 root.update_idletasks()
@@ -49,32 +68,43 @@ def play_game(players=4):
             if moves_not_made >= players:
                 game_over = True
                 break
+        # count round
+        count_round += 1
     
     # finish scoring
 
     # sort players into list of highest score first
     board.players.sort(key=lambda x: -x.score)
 
-    # print winner with highest score from ^ sort()
-    status_label.config(text=('Winner: ' + board.players[0].color))
+    # if multiple winners
+    if (board.players[0].score == board.players[1].score and 
+          board.players[1].score == board.players[2].score and 
+          board.players[2].score == board.players[3].score):
+        status_label.config(text=('Even!'))
+    elif (board.players[0].score == board.players[1].score and 
+          board.players[1].score == board.players[2].score):
+        status_label.config(text=('Winner: {}, {} and {}'.format(board.players[0].get_color(), board.players[1].get_color(), board.players[2].get_color())))
+    elif board.players[0].score == board.players[1].score:
+        status_label.config(text=('Winner: {} and {}'.format(board.players[0].get_color(), board.players[1].get_color())))
+    else:
+        status_label.config(text=('Winner: {}'.format(board.players[0].get_color())))
+    
+    # display winner with highest score, or if tie / even
+    winner_result = status_label['text']
 
-    # TODO using lazy approach to handle ties, needs fix
-    # if scores are tied, in (i < j),
-    # player[i] will win player[j] due to sort and print player[0]
-    # but I don't want to change display area/font to accomodate for
-    # printing multiple winners... hmmmmmmmmm
 
-
-# update score of each player to their respective grids
 def update_scores():
+    """ update score of each player to their respective grids
+    """
     global board
     global score_display_grid
 
     for i, player in enumerate(board.players):
         score_display_grid[i].config(text=str(player.score))
 
-# players can choose to not make a move in the round
 def skip_move():
+    """ players can choose to not make a move in the round
+    """
     global move_chosen
     global moves_not_made
 
@@ -82,8 +112,9 @@ def skip_move():
     moves_not_made += 1
     move_chosen = True
 
-# choose which move to make
 def choose_move(i, j, e):
+    """ choose which move to make
+    """
     global move_chosen
     global board
     global piece
@@ -108,14 +139,16 @@ def choose_move(i, j, e):
         # remove piece from hand
         player.pieces.remove(piece)
 
-        # once a player has made a move in the round, reset moves_not_made
+        # once a player has made a move in the round,
+        # reset moves_not_made
         # (used to track if game should be over)
         moves_not_made = 0
         move_chosen = True
 
 
-# cycle the pieces available
 def cycle_piece(event):
+    """ cycle the pieces available
+    """
     global player
     global piece
     global piece_index
@@ -125,21 +158,22 @@ def cycle_piece(event):
 
     display_piece(piece)
 
-# cycle the position of current piece
 def cycle_position(event):
+    """ cycle the position of current piece
+    """
     global piece
 
-    if piece.rotation < 3:
+    if piece.rotation < 4:
         piece.rotation += 1
     else:
         piece.rotation = 0
         piece.flipped = False if piece.flipped else True
-        # TODO lol I need to fix this idk
 
     display_piece(piece)
 
-# display piece
 def display_piece(piece):
+    """ display piece
+    """
     global piece_display_grid
 
     # make everything black again
@@ -151,8 +185,9 @@ def display_piece(piece):
     for x, y in piece.square_locations([4, 4]):
         piece_display_grid[x][y].config(bg=piece.color)
 
-# refresh board
 def refresh(board):
+    """ refresh board
+    """
     global board_grid
 
     for i, row in enumerate(board.spaces):
@@ -162,11 +197,13 @@ def refresh(board):
 
 
 if __name__ == '__main__':
+    # create an output file
+    f= open("output_final.txt","w+")
+    f.write("{0:20s}{1:9s} \n\n".format("Player Stats", "|"))
     
     # init tkinter GUI
     root = Tk()
     root.title('CS521 :: Final Project :: BLOKUS')
-    # TODO optional if adding custom tk icon
     # root.iconbitmap('logo.ico')
 
     # draw game board
@@ -192,7 +229,8 @@ if __name__ == '__main__':
     turn_indicator.grid(row=0, sticky='NESW')
 
     # draw skip turn button
-    skip_turn_button = Button(status_frame, text='skip turn', command=skip_move)
+    # for the text color and bg color, windows and mac have diff default
+    skip_turn_button = Button(status_frame, highlightbackground='black', text='skip turn', command=skip_move)
     skip_turn_button.grid(row=1)
 
     # draw piece selector display
@@ -227,13 +265,19 @@ if __name__ == '__main__':
         score_display_grid[i] = L
 
     # draw status display area for announcing winners
-    status_label_frame = Frame(status_frame, bg='orange', width=250, height=50)
-    status_label = Label(status_label_frame, bg='orange', font=('Helvetica', '24'))
+    status_label_frame = Frame(status_frame, bg='orange', width=250, height=62)
+    status_label = Label(status_label_frame, bg='orange', font=('Helvetica', '24'), wraplength=250)
     status_label.place(relwidth=1.0, relheight=1.0)
     status_label_frame.grid(row=4, sticky='NSEW')
+
 
     # start the game!!
     play_game(4)
 
     # tkinter mainloop
     root.mainloop()
+    
+    # write the result
+    f.write("\n{}".format(winner_result))
+    # close the output file
+    f.close()
