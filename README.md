@@ -37,6 +37,20 @@ For more, see:
 - [Wikipedia](https://en.wikipedia.org/wiki/Blokus)
 - [YouTube video](https://www.youtube.com/watch?v=4HLIw4Imhmw)
 
+## Controls
+
+Game panel contains the game board (grid to the left), and a piece selector area (grid to the right).
+
+Players go in turns in the order of: [blue, yellow, red, green], staring in the upper left corner of the game board, going in a counter-clockwise direction.
+
+The upper right color block serves as a turn indicator that displays who's turn it is.
+
+Players can elect to skip their current turn by clicking the "skip turn" button.
+
+Player scores are displayed in the colored blocks below the piece selector area.
+
+Winner will be announced in lower right orange block when the game ends.
+
 ## Screenshots
 
 ![start screen](img/start.png)
