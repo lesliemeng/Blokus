@@ -36,3 +36,8 @@ For more, see:
 
 - [Wikipedia](https://en.wikipedia.org/wiki/Blokus)
 - [YouTube video](https://www.youtube.com/watch?v=4HLIw4Imhmw)
+
+## Screenshots
+
+![start screen](img/start.png)
+![game screen](img/game.png)
