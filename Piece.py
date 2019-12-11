@@ -152,3 +152,61 @@ class Piece():
                 if corner not in self.square_locations(origin) + self.edge_locations(origin):
                     corners.append(corner)
         return corners
+    
+if __name__ == '__main__':
+    '''
+    Unit Test
+    we provide unit tests for one kind of monomino, domino, trominoes
+    we compare values calculated by the functions to the validated correct values
+    
+    We can only test:
+    get_edge_squares()
+    get_edge_corners()
+
+    As functions below are all dependent on a square's origin,
+        and that requires the board class:
+    square_locations()
+    edge_locations()
+    corner_locations()
+    '''
+    
+    # 1 square tile, monomino
+    monomino = Piece([[0,0]])
+    monomino_edges = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+    monomino_corners = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+    
+    # test that get_edge_squares() calculate edges correctely
+    assert sorted(monomino.get_edge_squares(), key=lambda x:x[1]) == sorted(monomino_edges,key=lambda y:y[1]), (
+            "Error matching edges {} != {}".format(sorted(monomino.get_edge_squares(), key=lambda x:x[1]), sorted(monomino_edges,key=lambda y:y[1])))
+    
+    # test that get_corner_squares() calculate edges correctely
+    assert sorted(monomino.get_corner_squares(), key=lambda x:x[1]) == sorted(monomino_corners,key=lambda y:y[1]), (
+            "Error matching corners {} != {}".format(sorted(monomino.get_corner_squares(), key=lambda x:x[1]), sorted(monomino_corners,key=lambda y:y[1])))
+    
+    
+    # 2 squares tile, domino
+    domino = Piece(squares=[[0,0],[1,0]])
+    domino_edges = [[-1, 0], [0, 1], [0, -1], [2, 0], [1, 1], [1, -1]]
+    domino_corners = [[-1, 1], [-1, -1], [2, 1], [2, -1]]
+    
+    # test that get_edge_squares() calculate edges correctely
+    assert sorted(domino.get_edge_squares(), key=lambda x:x[1]) == sorted(domino_edges,key=lambda y:y[1]), (
+            "Error matching edges {} != {}".format(sorted(domino.get_edge_squares(), key=lambda x:x[1]), sorted(domino_edges,key=lambda y:y[1])))
+    
+    # test that get_corner_squares() calculate edges correctely
+    assert sorted(domino.get_corner_squares(), key=lambda x:x[1]) == sorted(domino_corners,key=lambda y:y[1]), (
+            "Error matching corners {} != {}".format(sorted(domino.get_corner_squares(), key=lambda x:x[1]), sorted(domino_corners,key=lambda y:y[1])))
+    
+
+    # 3 squares tile, trominoes, L shape
+    trominoes_l = Piece(squares=[[0,0],[1,0],[1,1]])
+    trominoes_l_edges = [[-1, 0], [0, 1], [0, -1], [2, 0], [1, -1], [2, 1], [0, 1], [1, 2]]
+    trominoes_l_corners = [[-1, 1], [-1, -1], [2, -1], [2, 2], [0, 2]]
+    
+    # test that get_edge_squares() calculate edges correctely
+    assert sorted(trominoes_l.get_edge_squares(), key=lambda x:x[1]) == sorted(trominoes_l_edges,key=lambda y:y[1]), (
+            "Error matching edges {} != {}".format(sorted(trominoes_l.get_edge_squares(), key=lambda x:x[1]), sorted(trominoes_l_edges,key=lambda l:l[1])))
+
+    # test that get_corner_squares() calculate edges correctely
+    assert sorted(trominoes_l.get_corner_squares(), key=lambda x:x[1]) == sorted(trominoes_l_corners,key=lambda y:y[1]), (
+            "Error matching corners {} != {}".format(sorted(trominoes_l.get_corner_squares(), key=lambda x:x[1]), sorted(trominoes_l_corners,key=lambda y:y[1])))
