@@ -90,3 +90,39 @@ class Player():
         # moves are represented as:
         # [index in self.pieces, coords, rotation, flip]
         return legal_moves
+
+
+if __name__ == '__main__':
+    '''
+    Unit Test
+    
+    We can only test:
+    get_color()
+    set_color()
+
+    We CANNOT test the following as it requires the board class:
+    get_legal_moves()
+    '''
+
+    # initiate Player object
+    init_color = "Orange"
+    test_player = Player(init_color)
+    
+    # test that get_color() returns the same value as init_color
+    assert test_player.get_color() == init_color, (
+            "Error matching color {} != {}".format(test_player.get_color(), init_color))
+
+    # set color
+    new_color = "Red"
+    test_player.set_color(new_color)
+    
+    # test that get_color() returns the new_color after player.__color
+    # is set to new_color using set_color(new_color)
+    assert test_player.get_color() == new_color, (
+            "Error matching color {} != {}".format(test_player.get_color(), new_color))
+    
+    # this will use __str__() & __repr__()
+    print(test_player) # player.__color should be red
+    test_player.set_color("Orange")
+    print(test_player) # player.__color should be orange
+    
