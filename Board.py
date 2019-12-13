@@ -9,6 +9,7 @@ This Board class is imported by main.py.
 More description are below
 """
 
+from Piece import Piece # only importing for unit test
 from Player import Player
 
 class Board():
@@ -89,6 +90,7 @@ if __name__ == '__main__':
     get_height()
     set_length()
     set_height()
+    is_legal_move()
     '''
     # initiate Board object
     init_length = 10
@@ -115,3 +117,10 @@ if __name__ == '__main__':
     # test that get_length() returns the same value as mod_length
     assert test_board.get_length() == mod_length, (
             "Error matching length {} != {}".format(test_board.get_length(), mod_length))
+
+
+    piece = Piece([[0,0]])
+    origin_sq = [0, 0]
+    # test that is_legal_move() returns False
+    assert test_board.is_legal_move(piece, origin_sq) == False, (
+            "Error matching is_legal_move {} != {}".format(test_board.is_legal_move(piece, origin_sq), False))
