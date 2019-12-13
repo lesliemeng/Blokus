@@ -80,3 +80,38 @@ class Board():
             return has_corner
         except IndexError:  # if move goes out of bounds of the game board
             return False
+        
+if __name__ == '__main__':
+    '''
+    Unit Test:
+    
+    get_length()
+    get_height()
+    set_length()
+    set_height()
+    '''
+    # initiate Board object
+    init_length = 10
+    init_height = 5
+    test_board = Board(4, init_length, init_height)
+    
+    # test that get_height() returns the same value as init_height
+    assert test_board.get_height() == init_height, (
+            "Error matching height {} != {}".format(test_board.get_height(), init_height))
+    
+    # test that get_length() returns the same value as init_length
+    assert test_board.get_length() == init_length, (
+            "Error matching length {} != {}".format(test_board.get_length(), init_length))
+
+    mod_length = 5
+    mod_height = 10
+    test_board.set_length(mod_length)
+    test_board.set_height(mod_height)
+
+    # test that get_height() returns the same value as mod_height
+    assert test_board.get_height() == mod_height, (
+            "Error matching height {} != {}".format(test_board.get_height(), mod_height))
+    
+    # test that get_length() returns the same value as mod_length
+    assert test_board.get_length() == mod_length, (
+            "Error matching length {} != {}".format(test_board.get_length(), mod_length))
